@@ -2,11 +2,13 @@ const mongoose = require("mongoose");
 const Campground = require("../models/campground");
 const cities = require("./cities");
 const { descriptors, places } = require("./seedHelpers");
+const dbUrl = process.env.DB_URL || "mongodb://localhost:27017/yelp-camp";
 
 main().catch(err => console.log(err));
 
 async function main() {
-  await mongoose.connect('mongodb://localhost:27017/yelp-camp');
+  // await mongoose.connect('mongodb://localhost:27017/yelp-camp');
+  await mongoose.connect(dbUrl);
   console.log("Connected to MongoDB!!!");
 };
 
@@ -14,11 +16,12 @@ const sample = array => array[Math.floor(Math.random() * array.length)];
 
 const seedDB = async () => {
   await Campground.deleteMany({});
-  for (let i = 0; i < 500; i++) {
+  for (let i = 0; i < 300; i++) {
     const random1000 = Math.floor(Math.random() * 1000);
     const price = Math.floor(Math.random() * 20) + 10;
     const camp = new Campground({
       author: "622b24f2d9eefb2acb03bac5",
+      // author: "yelp-first-user",
       location: `${cities[random1000].city}, ${cities[random1000].state}`,
       title: `${sample(descriptors)} ${sample(places)}`,
       description: "Camping describes a range of activities and approaches to outdoor accommodation. Survivalist and wild campers typically set off with as little as possible to get by. Other campers might use specialised camping gear designed to provide comfort, including their own power and heat sources as well as camping furniture.",
